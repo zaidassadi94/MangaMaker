@@ -1,30 +1,33 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, afterEach } from "vitest";
 import { checkPrompt, assertPromptAllowed, GuardrailError } from "@/lib/guardrails";
 
-describe("guardrails: franchise blocklist", () => {
-  it("rejects a named franchise character", () => {
-    const r = checkPrompt("a hero who looks exactly like Naruto with a headband");
+describe("guardrails: copyright/franchise filter (OFF by default)", () => {
+  afterEach(() => {
+    delete process.env.COPYRIGHT_FILTER;
+  });
+
+  it("allows franchise-named prompts when the filter is off (default)", () => {
+    expect(checkPrompt("a hero who looks exactly like Naruto with a headband").ok).toBe(true);
+    expect(checkPrompt("in the style of Demon Slayer").ok).toBe(true);
+  });
+
+  it("does not block ordinary words that overlap the blocklist", () => {
+    // "power", "all might", "nami" are common English — must not be blocked.
+    expect(checkPrompt("a power line at dusk").ok).toBe(true);
+    expect(checkPrompt("we all might make it").ok).toBe(true);
+    expect(checkPrompt("nami swept the coast").ok).toBe(true);
+  });
+
+  it("blocks franchise names only when COPYRIGHT_FILTER=on", () => {
+    process.env.COPYRIGHT_FILTER = "on";
+    const r = checkPrompt("a hero who looks exactly like Naruto");
     expect(r.ok).toBe(false);
     expect(r.category).toBe("franchise");
     expect(r.message).toContain("original characters");
   });
 
-  it("rejects multi-word franchise names", () => {
-    expect(checkPrompt("in the style of Demon Slayer").ok).toBe(false);
-    expect(checkPrompt("a Dragon Ball style fight").ok).toBe(false);
-  });
-
-  it("is case-insensitive", () => {
-    expect(checkPrompt("PIKACHU on a rooftop").ok).toBe(false);
-  });
-
-  it("allows original descriptions", () => {
-    const r = checkPrompt("a spiky-haired swordsman in a torn red coat, fierce eyes");
-    expect(r.ok).toBe(true);
-  });
-
-  it("does not false-positive on ordinary words", () => {
-    expect(checkPrompt("a quiet fishing village at dawn").ok).toBe(true);
+  it("allows original descriptions regardless of the filter", () => {
+    expect(checkPrompt("a spiky-haired swordsman in a torn red coat, fierce eyes").ok).toBe(true);
   });
 });
 
@@ -49,11 +52,15 @@ describe("guardrails: content filter", () => {
 });
 
 describe("assertPromptAllowed", () => {
-  it("throws a GuardrailError on rejection", () => {
-    expect(() => assertPromptAllowed("draw Goku")).toThrow(GuardrailError);
+  it("throws a GuardrailError on disallowed content (child-safety filter)", () => {
+    expect(() => assertPromptAllowed("a nude underage child")).toThrow(GuardrailError);
   });
 
   it("does not throw on allowed prompts", () => {
     expect(() => assertPromptAllowed("an original knight in silver armor")).not.toThrow();
+  });
+
+  it("does not throw on franchise names by default (copyright filter off)", () => {
+    expect(() => assertPromptAllowed("draw Goku")).not.toThrow();
   });
 });

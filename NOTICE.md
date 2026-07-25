@@ -4,15 +4,18 @@
 
 MangaForge is designed to create **original** manga. Its style presets describe
 generic manga aesthetics (inking, screentone, shot framing) and never reference
-any specific franchise, series, or character. A good-faith content guardrail
-(`src/lib/guardrails.ts`) rejects prompts that name well-known franchise
-characters, depict sexual content involving minors, extreme gore, or real public
-figures.
+any specific franchise, series, or character.
 
-**This guardrail is a good-faith filter, not a legal guarantee.** It is a
-non-exhaustive blocklist plus simple heuristics. Operators are responsible for
-their own use, and for extending the blocklist for their jurisdiction and
-audience.
+The content guardrail (`src/lib/guardrails.ts`) always rejects prompts depicting
+sexual content involving minors, extreme gore, or real public figures. An
+optional **copyright/franchise filter** (rejecting prompts that name well-known
+franchise characters) is available but **off by default** — enable it with
+`COPYRIGHT_FILTER=on`. Operators who publish generated work are responsible for
+ensuring its originality.
+
+**These filters are a good-faith measure, not a legal guarantee.** They are
+non-exhaustive blocklists plus simple heuristics. Operators are responsible for
+their own use, and for extending them for their jurisdiction and audience.
 
 ## Ownership of generated output
 

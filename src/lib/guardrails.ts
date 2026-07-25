@@ -81,18 +81,27 @@ function containsPhrase(haystack: string, phrase: string): boolean {
   return haystack.includes(` ${p} `);
 }
 
+/** Copyright/franchise filter is opt-in. Enable with COPYRIGHT_FILTER=on. */
+export function copyrightFilterEnabled(): boolean {
+  return process.env.COPYRIGHT_FILTER === "on";
+}
+
 export function checkPrompt(prompt: string): GuardrailResult {
   const h = normalize(prompt);
 
-  for (const name of FRANCHISE_BLOCKLIST) {
-    if (containsPhrase(h, name)) {
-      return {
-        ok: false,
-        category: "franchise",
-        match: name,
-        message:
-          'MangaForge creates original characters — describe the look you want instead (e.g. "a spiky-haired swordsman in a torn red coat").',
-      };
+  // Copyright / franchise filter is OFF by default (restore with COPYRIGHT_FILTER=on).
+  // The child-safety, gore, and real-person content filters below always run.
+  if (copyrightFilterEnabled()) {
+    for (const name of FRANCHISE_BLOCKLIST) {
+      if (containsPhrase(h, name)) {
+        return {
+          ok: false,
+          category: "franchise",
+          match: name,
+          message:
+            'MangaForge creates original characters — describe the look you want instead (e.g. "a spiky-haired swordsman in a torn red coat").',
+        };
+      }
     }
   }
 
