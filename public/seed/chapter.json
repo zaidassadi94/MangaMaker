@@ -1,0 +1,42 @@
+{
+  "title": "Chronicles of Long",
+  "synopsis": "A retired swordsmith is pulled back into a war when a stranger arrives carrying the last blade they ever forged — and the mark of an enemy long thought dead. Drawn into a conflict larger than themselves, Rei must master a dangerous gift while Ren closes in.",
+  "genre": "shonen action",
+  "pageSize": "b5",
+  "readingDirection": "rtl",
+  "pages": [
+    {
+      "file": "page-01.svg",
+      "index": 0
+    },
+    {
+      "file": "page-02.svg",
+      "index": 1
+    },
+    {
+      "file": "page-03.svg",
+      "index": 2
+    },
+    {
+      "file": "page-04.svg",
+      "index": 3
+    },
+    {
+      "file": "page-05.svg",
+      "index": 4
+    },
+    {
+      "file": "page-06.svg",
+      "index": 5
+    },
+    {
+      "file": "page-07.svg",
+      "index": 6
+    },
+    {
+      "file": "page-08.svg",
+      "index": 7
+    }
+  ],
+  "provenance": "mock-provider SVG placeholder art"
+}
