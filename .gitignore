@@ -1,0 +1,41 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# database (generated locally / ephemeral)
+/data/*.db
+/data/*.db-*
+/data/*.sqlite
+
+# generated panel art (regenerated per project, never committed)
+/public/generated/
+
+# testing
+/coverage
+
+# env files — commit ONLY .env.example
+.env
+.env.*
+!.env.example
+
+# misc
+.DS_Store
+*.pem
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vercel
+.idea
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MangaForge chrome. Dark-only. Near-black canvas surround, paper-white page,
+   ink-black accents, a single vermilion accent, halftone texture in empties.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  --color-ink: #0d0d0f;
+  --color-surround: #141417;
+  --color-panel: #1b1b20;
+  --color-panel-2: #242429;
+  --color-line: #303036;
+  --color-paper: #f7f4ec;
+  --color-paper-shade: #e9e5da;
+  --color-vermilion: #e03131;
+  --color-vermilion-dim: #b02525;
+  --color-fg: #ececf0;
+  --color-fg-dim: #a0a0aa;
+  --color-fg-faint: #6b6b76;
+
+  --font-display: var(--font-oswald), "Arial Narrow", sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-dialogue: var(--font-comic-neue), "Comic Sans MS", cursive;
+  --font-sfx: var(--font-bangers), Impact, cursive;
+  --font-narration: var(--font-zen-antique), Georgia, serif;
+
+  --radius: 0.5rem;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+h1,
+h2,
+h3,
+.display {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+/* Halftone dot texture for empty states / surrounds. */
+.halftone {
+  background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
+  background-size: 10px 10px;
+}
+.halftone-faint {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+/* Paper page surface with a subtle drop shadow. */
+.paper {
+  background: var(--color-paper);
+  color: #111;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.03),
+    0 24px 60px -18px rgba(0, 0, 0, 0.7);
+}
+
+.accent-bar {
+  background: linear-gradient(90deg, var(--color-vermilion), transparent);
+}
+
+/* Thin, tool-like scrollbars. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-panel-2);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--color-panel) 25%, var(--color-panel-2) 50%, var(--color-panel) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-vermilion);
+  outline-offset: 2px;
+}
+
+/* Range slider baseline (used by wizard pacing). */
+input[type="range"] {
+  accent-color: var(--color-vermilion);
+}
