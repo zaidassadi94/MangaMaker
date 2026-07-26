@@ -26,6 +26,7 @@ export class MockProvider implements ImageProvider {
       shot: opts.meta?.shotType,
       angle: opts.meta?.cameraAngle,
       chars: (opts.meta?.characterNames ?? []).join(","),
+      mono: opts.meta?.mono === false ? "0" : undefined,
       v: 0,
     });
     return { url, seed };

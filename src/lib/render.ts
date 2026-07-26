@@ -58,6 +58,7 @@ export async function renderPanel(
       shotType: panel.shotType,
       cameraAngle: panel.cameraAngle,
       characterNames: involved.map((c) => c.name),
+      mono: project.styleGuide.mono ?? true,
     },
   });
   return { imageUrl: result.url, seed: result.seed, prompt };
@@ -110,16 +111,17 @@ export async function editPanel(
 
 export async function renderCharacterSheet(character: Character, project: Project): Promise<string> {
   const provider = getImageProvider();
+  const styleSuffix = project.styleGuide.styleSuffix ?? "clean manga linework, screentone shading, no color, monochrome, no text, no watermark";
   const prompt =
     `${project.styleGuide.positivePrompt}, character model sheet, front view, three-quarter view, and three expression headshots of ONE original character, ` +
     `${character.name}: ${character.appearanceDescription} [ref:${character.seedToken}], plain white background, full body reference, consistent design, ` +
-    `clean manga linework, screentone shading, no color, monochrome, no text, no watermark`;
+    styleSuffix;
   const result = await provider.generate({
     prompt,
     negativePrompt: project.styleGuide.negativePrompt,
     seed: seedFromString(project.styleGuide.seed + character.seedToken),
     aspectRatio: "4:3",
-    meta: { projectId: project.id, panelId: `sheet-${character.id}`, characterNames: [character.name], shotType: "model-sheet" },
+    meta: { projectId: project.id, panelId: `sheet-${character.id}`, characterNames: [character.name], shotType: "model-sheet", mono: project.styleGuide.mono ?? true },
   });
   return result.url;
 }

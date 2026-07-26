@@ -56,7 +56,7 @@ export async function generateBible(input: {
   if (!hasClaude()) return { bible: mockBible(input.premise, input.genre), source: "mock" };
   try {
     const system =
-      "You are a manga story editor. Return ONLY a JSON object for a manga chapter bible. " +
+      "You are a comic and manga story editor. Return ONLY a JSON object for a chapter bible. " +
       "Create ORIGINAL characters — never reference real franchises, series, or real people. " +
       "Give each character a detailed VISUAL appearance (hair, eyes, build, clothing, distinguishing marks, age). " +
       'Shape: {"title","synopsis","tone","setting","genre","characters":[{"name","role","appearanceDescription","personality"}],"beats":[{"act","title","summary"}]}. ' +
@@ -86,7 +86,7 @@ export async function generateScript(input: {
     const layoutIds = LAYOUT_TEMPLATES.map((l) => `${l.id} (${l.slots.length} panels, ${l.family})`).join(", ");
     const names = input.bible.characters.map((c) => c.name).join(", ");
     const system =
-      "You are a manga page-breakdown artist. Convert a beat sheet into pages and panels. " +
+      "You are a comic and manga page-breakdown artist. Convert a beat sheet into pages and panels. " +
       "Return ONLY JSON of shape {\"pages\":[{\"layoutTemplateId\",\"panels\":[{\"description\",\"shotType\",\"cameraAngle\",\"emotion\",\"setting\",\"characterNames\":[],\"dialogue\":[{\"type\",\"speaker\",\"text\"}],\"sfx\":[{\"text\",\"style\"}]}]}]}. " +
       "Each page has 3-7 panels. shotType is one of establishing, wide, medium, closeup, extreme-closeup, over-shoulder, pov, insert. " +
       "cameraAngle is one of eye, low, high, dutch, birdseye, worms. dialogue.type is one of speech, thought, shout, whisper, narration, offpanel, aside. sfx.style is one of impact, soft, jagged, motion. " +

@@ -6,7 +6,7 @@ import {
   newProjectId, newCharacterId, newChapterId, newPageId, newPanelId,
   newBubbleId, newSfxId, newJobId, id as makeId, seedFromString,
 } from "@/lib/ids";
-import { getPreset, SHARED_NEGATIVE_PROMPT } from "@/lib/styles";
+import { getPreset, styleSuffixFor, negativePromptFor } from "@/lib/styles";
 import { getLayout } from "@/lib/layouts";
 import { getReadingOrder } from "@/lib/reading-order";
 import { promptForPanel } from "@/lib/prompt";
@@ -29,11 +29,14 @@ export function buildStyleGuide(styleId: string, seed?: number): StyleGuide {
     name: preset.name,
     presetId: preset.id,
     positivePrompt: preset.positiveCore,
-    negativePrompt: SHARED_NEGATIVE_PROMPT,
+    negativePrompt: negativePromptFor(preset.medium),
     seed: seed ?? seedFromString(preset.id + Date.now()),
     lineWeight: preset.lineWeight,
     toneDensity: preset.toneDensity,
     inkContrast: preset.inkContrast,
+    medium: preset.medium,
+    styleSuffix: styleSuffixFor(preset.medium),
+    mono: preset.mono,
   };
 }
 

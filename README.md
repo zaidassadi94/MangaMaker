@@ -8,8 +8,8 @@
 <h1 align="center">MangaForge</h1>
 
 <p align="center">
-  <strong>Type a story idea. Get a fully drawn, laid-out, black-and-white manga chapter —
-  then edit it panel by panel and export it.</strong>
+  <strong>Type a story idea. Get a fully drawn, laid-out chapter — black-and-white
+  manga or full-colour comic — then edit it panel by panel and export it.</strong>
 </p>
 
 <p align="center">
@@ -41,7 +41,10 @@ Export to PDF, CBZ, a PNG set, or a webtoon long-strip.
 - **20+ layout templates** with correct **right-to-left** manga reading order
   (flips for LTR). Swapping a layout re-flows existing panels instead of nuking
   them.
-- **6 style presets** + 8 one-click genre starters.
+- **Manga *or* comic**: 10 style presets across two mediums — 6 monochrome manga
+  (right-to-left) and 4 full-colour comic styles (American superhero, graphic
+  novel, retro pulp, ligne claire; left-to-right) — plus 12 genre starters. The
+  medium drives colour vs. B/W, reading direction, and even the mock placeholders.
 - **Undo/redo** (120 steps) over panel moves, text, bubbles, SFX, layout swaps,
   and regenerations. Debounced autosave.
 - **Export**: PDF, CBZ (with ComicInfo + RTL flag), zipped PNG set, stitched

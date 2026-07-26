@@ -35,7 +35,7 @@ export function characterToken(c: Pick<Character, "name" | "appearanceDescriptio
 }
 
 export interface AssembleInput {
-  style: Pick<StyleGuide, "positivePrompt">;
+  style: Pick<StyleGuide, "positivePrompt" | "styleSuffix">;
   shotType: ShotType;
   cameraAngle: CameraAngle;
   emotion?: string;
@@ -62,7 +62,7 @@ export function assemblePanelPrompt(input: AssembleInput): string {
     parts.push(`setting: ${input.setting.trim()}`);
   }
 
-  parts.push(SHARED_STYLE_SUFFIX);
+  parts.push(input.style.styleSuffix ?? SHARED_STYLE_SUFFIX);
 
   return parts
     .map((p) => p.replace(/\s+/g, " ").trim())
@@ -73,7 +73,7 @@ export function assemblePanelPrompt(input: AssembleInput): string {
 /** Build the prompt for an existing panel given its style + involved characters. */
 export function promptForPanel(
   panel: Pick<Panel, "shotType" | "cameraAngle" | "emotion" | "description" | "setting">,
-  style: Pick<StyleGuide, "positivePrompt">,
+  style: Pick<StyleGuide, "positivePrompt" | "styleSuffix">,
   characters: Array<Pick<Character, "name" | "appearanceDescription" | "seedToken">>,
 ): string {
   return assemblePanelPrompt({

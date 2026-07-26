@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { assemblePanelPrompt, characterToken } from "@/lib/prompt";
-import { SHARED_STYLE_SUFFIX } from "@/lib/styles";
+import { SHARED_STYLE_SUFFIX, COMIC_STYLE_SUFFIX } from "@/lib/styles";
 
 const style = { positivePrompt: "high-contrast black and white manga panel, bold inking" };
 
@@ -43,6 +43,23 @@ describe("assemblePanelPrompt", () => {
     const mad = assemblePanelPrompt({ style, shotType: "wide", cameraAngle: "eye", emotion: "furious", description: "a quiet street", characters: [] });
     expect(neutral).not.toContain("mood:");
     expect(mad).toContain("mood: furious");
+  });
+
+  it("uses the project's style suffix (comic = colour, manga = monochrome)", () => {
+    const manga = assemblePanelPrompt({ style, shotType: "medium", cameraAngle: "eye", description: "x", characters: [] });
+    expect(manga.endsWith(SHARED_STYLE_SUFFIX)).toBe(true);
+    expect(manga).toContain("monochrome");
+
+    const comic = assemblePanelPrompt({
+      style: { positivePrompt: "vibrant superhero comic panel", styleSuffix: COMIC_STYLE_SUFFIX },
+      shotType: "medium",
+      cameraAngle: "eye",
+      description: "x",
+      characters: [],
+    });
+    expect(comic.endsWith(COMIC_STYLE_SUFFIX)).toBe(true);
+    expect(comic).toContain("color");
+    expect(comic).not.toContain("monochrome");
   });
 
   it("characterToken embeds the appearance and stable ref token", () => {

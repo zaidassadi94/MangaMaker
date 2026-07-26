@@ -5,6 +5,7 @@
 
 export type ReadingDirection = "rtl" | "ltr";
 export type PageSize = "b5" | "a4" | "webtoon";
+export type Medium = "manga" | "comic";
 
 export type PanelShape = "rect" | "skew" | "circle" | "burst" | "bleed";
 
@@ -66,6 +67,10 @@ export interface StyleGuide {
   lineWeight: number; // 0..1
   toneDensity: number; // 0..1
   inkContrast: number; // 0..1
+  // Medium fields are optional so pre-existing projects keep working (default = manga).
+  medium?: Medium;
+  styleSuffix?: string; // appended to every panel prompt for this project
+  mono?: boolean; // black-and-white (manga) vs colour (comic)
 }
 
 // ── Characters ───────────────────────────────────────────────────────────────

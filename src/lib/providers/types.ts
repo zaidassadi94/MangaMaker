@@ -10,6 +10,7 @@ export interface GenerateMeta {
   cameraAngle?: string;
   characterNames?: string[];
   index?: number;
+  mono?: boolean; // black-and-white (manga) vs colour (comic); used by the mock provider
 }
 
 export interface GenerateOpts {

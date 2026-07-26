@@ -15,6 +15,7 @@ export interface MockPanelOptions {
   characterNames?: string[];
   label?: string; // free-text override (e.g. instruction for edits)
   variant?: number;
+  mono?: boolean; // false → colour comic placeholder
 }
 
 function esc(s: string): string {
@@ -27,6 +28,16 @@ export function renderMockPanelSvg(opts: MockPanelOptions): string {
   const shot = opts.shotType ?? "medium";
   const angle = opts.cameraAngle ?? "eye";
   const names = (opts.characterNames ?? []).filter(Boolean);
+
+  // Palette: monochrome (manga) by default; a seeded colour scheme for comics.
+  const color = opts.mono === false;
+  const hue = (((opts.seed % 360) + 360) % 360);
+  const figureFill = color ? `hsl(${hue}, 52%, 44%)` : "#111";
+  const groundFill = color ? `hsl(${(hue + 150) % 360}, 40%, 72%)` : "#e7e4da";
+  const skyTop = color ? `hsl(${hue}, 60%, 96%)` : "#ffffff";
+  const skyBottom = color ? `hsl(${(hue + 30) % 360}, 45%, 86%)` : "#eceae2";
+  const dotBg = color ? `hsl(${hue}, 50%, 95%)` : "#f7f5ef";
+  const dotFg = color ? `hsl(${(hue + 20) % 360}, 45%, 80%)` : "#d9d5c8";
 
   // Halftone dot field, density from seed.
   const dot = 12 + Math.floor(rand() * 8);
@@ -44,11 +55,11 @@ export function renderMockPanelSvg(opts: MockPanelOptions): string {
     const bodyW = headR * 2.1;
     const bodyH = h * 0.34 * scale;
     figures.push(`
-      <g opacity="0.9">
-        <circle cx="${cx.toFixed(1)}" cy="${headY.toFixed(1)}" r="${headR.toFixed(1)}" fill="#111"/>
+      <g opacity="0.92">
+        <circle cx="${cx.toFixed(1)}" cy="${headY.toFixed(1)}" r="${headR.toFixed(1)}" fill="${figureFill}" stroke="#111" stroke-width="${color ? 3 : 0}"/>
         <path d="M ${(cx - bodyW / 2).toFixed(1)} ${(headY + headR + bodyH).toFixed(1)}
                  Q ${cx.toFixed(1)} ${(headY + headR - h * 0.02).toFixed(1)} ${(cx + bodyW / 2).toFixed(1)} ${(headY + headR + bodyH).toFixed(1)} Z"
-              fill="#111"/>
+              fill="${figureFill}" stroke="#111" stroke-width="${color ? 3 : 0}"/>
       </g>`);
   }
 
@@ -77,18 +88,18 @@ export function renderMockPanelSvg(opts: MockPanelOptions): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label)}">
   <defs>
     <pattern id="halftone" width="${dot}" height="${dot}" patternUnits="userSpaceOnUse">
-      <rect width="${dot}" height="${dot}" fill="#f7f5ef"/>
-      <circle cx="${(dot / 2).toFixed(1)}" cy="${(dot / 2).toFixed(1)}" r="${dotR.toFixed(2)}" fill="#d9d5c8"/>
+      <rect width="${dot}" height="${dot}" fill="${dotBg}"/>
+      <circle cx="${(dot / 2).toFixed(1)}" cy="${(dot / 2).toFixed(1)}" r="${dotR.toFixed(2)}" fill="${dotFg}"/>
     </pattern>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#eceae2"/>
+      <stop offset="0" stop-color="${skyTop}"/>
+      <stop offset="1" stop-color="${skyBottom}"/>
     </linearGradient>
   </defs>
   <rect width="${w}" height="${h}" fill="url(#sky)"/>
   <rect width="${w}" height="${h}" fill="url(#halftone)" opacity="0.5"/>
   ${speedLines.join("")}
-  <rect x="0" y="${(h * 0.62).toFixed(0)}" width="${w}" height="${(h * 0.38).toFixed(0)}" fill="#e7e4da" opacity="0.6"/>
+  <rect x="0" y="${(h * 0.62).toFixed(0)}" width="${w}" height="${(h * 0.38).toFixed(0)}" fill="${groundFill}" opacity="0.6"/>
   ${figures.join("")}
   <rect x="2" y="2" width="${w - 4}" height="${h - 4}" fill="none" stroke="#111" stroke-width="4"/>
   <g transform="translate(${(w - 12).toFixed(0)}, 22)" text-anchor="end">

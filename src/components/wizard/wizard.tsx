@@ -34,6 +34,7 @@ export function Wizard() {
   const [premise, setPremise] = useState("");
   const [genre, setGenre] = useState("");
   const [styleId, setStyleId] = useState("shonen-action");
+  const [mediumFilter, setMediumFilter] = useState<"manga" | "comic">("manga");
   const [direction, setDirection] = useState<"rtl" | "ltr">("rtl");
   const [pageSize, setPageSize] = useState<"b5" | "a4" | "webtoon">("b5");
   const [pageCount, setPageCount] = useState(8);
@@ -58,6 +59,8 @@ export function Wizard() {
       setGenre(s.genre);
       setStyleId(s.styleId);
       setPacing(s.pacing);
+      setMediumFilter(s.medium);
+      setDirection(s.readingDirection);
     }
   }, [params]);
 
@@ -73,6 +76,8 @@ export function Wizard() {
     setGenre(s.genre);
     setStyleId(s.styleId);
     setPacing(s.pacing);
+    setMediumFilter(s.medium);
+    setDirection(s.readingDirection);
     toast(`Loaded "${s.name}" starter`, "info");
   }
 
@@ -211,10 +216,30 @@ export function Wizard() {
 
         {step === 1 && (
           <div className="space-y-5">
-            <h1 className="font-display text-2xl font-bold">Pick a look</h1>
+            <div className="flex items-center justify-between">
+              <h1 className="font-display text-2xl font-bold">Pick a look</h1>
+              <div className="flex rounded-md border border-[var(--color-line)] p-0.5 text-xs">
+                {(["manga", "comic"] as const).map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => {
+                      setMediumFilter(m);
+                      const first = STYLE_PRESETS.find((p) => p.medium === m);
+                      if (first) { setStyleId(first.id); setDirection(m === "comic" ? "ltr" : "rtl"); }
+                    }}
+                    className={`rounded px-3 py-1 capitalize ${mediumFilter === m ? "bg-[var(--color-vermilion)] text-white" : "text-[var(--color-fg-dim)]"}`}
+                  >
+                    {m}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <p className="text-xs text-[var(--color-fg-dim)]">
+              {mediumFilter === "comic" ? "Full-colour comic styles, left-to-right." : "Black-and-white manga styles, right-to-left."}
+            </p>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {STYLE_PRESETS.map((p) => (
-                <button key={p.id} onClick={() => setStyleId(p.id)} className={`overflow-hidden rounded-lg border text-left transition-colors ${styleId === p.id ? "border-[var(--color-vermilion)]" : "border-[var(--color-line)] hover:border-[var(--color-fg-faint)]"}`}>
+              {STYLE_PRESETS.filter((p) => p.medium === mediumFilter).map((p) => (
+                <button key={p.id} onClick={() => { setStyleId(p.id); setDirection(p.medium === "comic" ? "ltr" : "rtl"); }} className={`overflow-hidden rounded-lg border text-left transition-colors ${styleId === p.id ? "border-[var(--color-vermilion)]" : "border-[var(--color-line)] hover:border-[var(--color-fg-faint)]"}`}>
                   <div className="aspect-[4/3] w-full" style={{ background: p.swatch }} />
                   <div className="p-3">
                     <div className="font-display text-sm font-semibold">{p.name}</div>

@@ -14,6 +14,7 @@ export function GET(req: Request): Response {
     characterNames: (q.get("chars") ?? "").split(",").map((s) => s.trim()).filter(Boolean),
     label: q.get("label") ?? undefined,
     variant: Number(q.get("v") ?? "0") || 0,
+    mono: q.get("mono") !== "0",
   });
   return new Response(svg, {
     headers: {
